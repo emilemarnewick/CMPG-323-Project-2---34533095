@@ -1,0 +1,2 @@
+# Ignore appsettings.json to protect connection string
+appsettings.json
