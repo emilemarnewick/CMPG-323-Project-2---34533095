@@ -27,7 +27,7 @@ namespace Project2.Controllers
             return await _context.Zone.ToListAsync();
         }
 
-        // GET: api/Zones/5
+      
         [HttpGet("{id}")]
         public async Task<ActionResult<Zone>> GetZone(Guid id)
         {
@@ -39,6 +39,25 @@ namespace Project2.Controllers
             }
 
             return zone;
+        }
+
+        // GET: api/Zones/5
+        [HttpGet("getDevices{id}")]
+        public async Task<ActionResult<IEnumerable<Device>>> GetZoneDevices(Guid id)
+        {
+           var results = await _context.Device.Join(
+                            _context.Zone,
+                            firstentity => firstentity.ZoneId,
+                            secondentity => secondentity.ZoneId,
+                            (firstentity, secondentity) => new
+                            {
+                                Device = firstentity,
+                                Zone = secondentity
+                            })
+                            .Select(entity => entity.Device)
+                            .ToListAsync();
+
+            return results;
         }
 
         // PUT: api/Zones/5
